@@ -4,7 +4,7 @@ import { Navigation } from './navigation.js';
 const START_X_POS   = 10;
 const START_Y_POS   = 10;
 // const REDUCE_WIDTH  = 20;
-const REDUCE_HEIGHT = 970;
+const REDUCE_HEIGHT = 600;
 const LINE_WIDTH    = 5;
 const HEADPANEL_LINE_COLOR = 'rgb(0, 0, 0)';
 
