@@ -1,4 +1,5 @@
 import { Frame } from './frame.js';
+import { Point } from './point.js';
 
 class App {
     constructor() {
@@ -9,11 +10,15 @@ class App {
         this.pixelRatio = window.devicePixelRatio > 1 ? 2 : 1;
 
         this.frame = new Frame();
+        this.mousePos = new Point();
+        this.curItem = null;
 
         window.addEventListener('resize', this.resize.bind(this), false);
         this.resize();
 
         window.requestAnimationFrame(this.animate.bind(this));
+
+        document.addEventListener('click', this.onClick.bind(this), false);
     }
 
     resize() {
@@ -33,6 +38,21 @@ class App {
         this.context.clearRect(0, 0, this.stageWidth, this.stageHeight);
         
         this.frame.onDraw(this.context, this.stageWidth, this.stageHeight);
+    }
+
+    onClick(e) {
+        this.mousePos.x = e.clientX;
+        this.mousePos.y = e.clientY;
+        
+        for ( let i = this.frame.headPanel.nav.items.length - 1; i >= 0 ; i--) {
+            const item = this.frame.headPanel.nav.items[i].onClick(this.mousePos.clone());
+            // if(item) {
+            //     this.curItem = item;
+            //     const index = this.items.indexOf(item);
+            //     this.items.push(this.items.splice(index, 1)[0]);
+            //     break;
+            // }
+        }
     }
 }
 

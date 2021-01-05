@@ -27,5 +27,13 @@ export class NavItem {
 
         context.font = ITEM_FONT_SIZE + ' ' + ITEM_FONT_STYLE;
         context.fillText(this.name, this.pos.x + 10, this.pos.y + 25);
-    }    
+    }
+
+    getWidth() {
+        return ITEM_WIDTH;
+    }
+
+    getHeight() {
+        return ITEM_HEIGHT;
+    }
 } 

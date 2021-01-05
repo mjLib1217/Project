@@ -1,5 +1,5 @@
 import { Point } from './point.js';
-import { NavItem } from './navItem.js';
+import { TableNavItem } from './tableNavItem.js';
 
 const START_X_POS       = 10;
 const START_Y_POS       = 10;
@@ -16,7 +16,7 @@ export class Navigation {
         this.pos = new Point(START_X_POS, START_Y_POS);
         this.items = [];
 
-        this.items.push(new NavItem('Table', ITEM_TABLE_X_POS, ITEM_TABLE_Y_POS));    
+        this.items.push(new TableNavItem('Table', ITEM_TABLE_X_POS, ITEM_TABLE_Y_POS));
     }
 
     onDraw(context, nHeadPanelWidth, nHeadPanelHeight) {
