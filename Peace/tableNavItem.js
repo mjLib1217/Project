@@ -4,6 +4,7 @@ export class TableNavItem extends NavItem{
 
     constructor(name, x, y) {
         super(name, x, y);
+        this.file = null;
     }
 
     onDraw(context, index, nHeadPanelWidth, nHeadPanelHeight) {
@@ -12,7 +13,21 @@ export class TableNavItem extends NavItem{
 
     onClick(point) {
         if(point.collide(this.pos, super.getWidth(), super.getHeight())) {
-            console.log('Click');
+            console.log('Table Click');
+            const file = document.createElement('input');
+            file.type = 'file';
+
+            file.onchange = evt => {
+                const uploadFile = evt.target.files[0];
+                const reader = new FileReader();
+                reader.readAsText(uploadFile, 'UTF-8');
+                reader.onload = readerEvt => {
+                    const content = readerEvt.target.result;
+                    console.log(content);
+                }
+            }
+
+            file.click();
         }
     }
 } 
