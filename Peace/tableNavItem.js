@@ -22,7 +22,9 @@ export class TableNavItem extends NavItem{
                 const reader = new FileReader();
                 reader.readAsText(uploadFile, 'UTF-8');
                 reader.onload = readerEvt => {
-                    const content = readerEvt.target.result;
+                    let content = readerEvt.target.result;
+                    content = content.replaceAll(' ', '');
+                    content = content.replaceAll('\n', '');                    
                     console.log(content);
                 }
             }
