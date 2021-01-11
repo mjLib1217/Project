@@ -2,16 +2,21 @@ import { Frame } from './frame.js';
 import { Point } from './point.js';
 
 class App {
+
     constructor() {
+
         this.canvas = document.createElement('canvas');        
         document.body.appendChild(this.canvas);
         this.context = this.canvas.getContext('2d');
-
-        this.pixelRatio = window.devicePixelRatio > 1 ? 2 : 1;
-
+        
         this.frame = new Frame();
+
         this.mousePos = new Point();
-        this.curItem = null;
+        
+        this.pixelRatio = window.devicePixelRatio > 1 ? 2 : 1;
+        
+        this.nStageWidth = 0;
+        this.nStageHeight = 0;
 
         window.addEventListener('resize', this.resize.bind(this), false);
         this.resize();
@@ -19,39 +24,38 @@ class App {
         window.requestAnimationFrame(this.animate.bind(this));
 
         document.addEventListener('click', this.onClick.bind(this), false);
+
     }
 
     resize() {
 
-        this.stageWidth = window.innerWidth;
-        this.stageHeight = window.innerHeight;
+        this.nStageWidth = window.innerWidth;
+        this.nStageHeight = window.innerHeight;
         
-        this.canvas.width = this.stageWidth * this.pixelRatio;
-        this.canvas.height = this.stageHeight * this.pixelRatio;
+        this.canvas.width = this.nStageWidth * this.pixelRatio;
+        this.canvas.height = this.nStageHeight * this.pixelRatio;
+
         this.context.scale(this.pixelRatio, this.pixelRatio);
-        
+
     }
     
     animate() {
 
         window.requestAnimationFrame(this.animate.bind(this));
+
         this.context.clearRect(0, 0, this.stageWidth, this.stageHeight);
+        this.frame.onDraw(this.context, this.nStageWidth, this.nStageHeight);
         
-        this.frame.onDraw(this.context, this.stageWidth, this.stageHeight);
     }
 
     onClick(e) {
         this.mousePos.x = e.clientX;
         this.mousePos.y = e.clientY;
         
-        for ( let i = this.frame.headPanel.nav.items.length - 1; i >= 0 ; i--) {
-            const item = this.frame.headPanel.nav.items[i].onClick(this.mousePos.clone());
-            // if(item) {
-            //     this.curItem = item;
-            //     const index = this.items.indexOf(item);
-            //     this.items.push(this.items.splice(index, 1)[0]);
-            //     break;
-            // }
+        let nMainItemsLength = this.frame.aMainItems.length;
+
+        for ( let i = nMainItemsLength - 1; i >= 0 ; i--) {
+            this.frame.aMainItems[i].onClick(this.mousePos.clone());
         }
     }
 }

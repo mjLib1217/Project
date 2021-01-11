@@ -1,29 +1,61 @@
-import { Point } from './point.js'
-import { HeadPanel } from './headPanel.js'
-
-const START_X_POS   = 10;
-const START_Y_POS   = 10;
-const REDUCE_WIDTH  = 20;
-const REDUCE_HEIGHT = 20;
-const LINE_WIDTH    = 5;
-const FRAME_LINE_COLOR = 'rgb(0, 0, 0)';
+import { Point } from './point.js';
+import { ImportItem } from './importItem.js';
+import { ShowItem } from './showItem.js';
 
 export class Frame {
+
     constructor() {
-        this.pos = new Point(START_X_POS, START_Y_POS); // Frame 이 그려지는 시작 좌표
+        this.pos = new Point(10, 10);
         
-        this.headPanel = new HeadPanel();
+        this.nFrameWidth = 0;
+        this.nFrameHeight = 0;
+        this.nHeadPanelWidth = 0;
+        this.nHeadPanelHeight = 0;
+
+        this.nRightPanelStartXPos = 0;
+        this.nRightPanelStartYPos = 0;
+        this.nRightPanelWidth = 0;
+        this.nRightPanelHeight = 0;
+
+        this.aMainItems = [];
+        this.aMainItems.push(new ImportItem());
+        this.aMainItems.push(new ShowItem());
+
+        this.importItem = this.aMainItems[0];
+        this.showItem = this.aMainItems[1];
     }
 
-    onDraw(context, stageWidth, stageHeight) {
-        context.strokeStyle = FRAME_LINE_COLOR;
-        context.lineWidth = LINE_WIDTH;
+    onDraw(context, nStageWidth, nStageHeight) {
 
-        let nFrameWidth = stageWidth - REDUCE_WIDTH;
-        let nFrameHeight = stageHeight - REDUCE_HEIGHT;
+        this.nFrameWidth = nStageWidth - 20;
+        this.nFrameHeight = nStageHeight - 20;
+        
+        context.strokeStyle = 'rgb(0, 0, 0)';
+        context.lineWidth = 5;
+        context.strokeRect(this.pos.x, this.pos.y, this.nFrameWidth, this.nFrameHeight);
+        
+        ////////////////////////////////
+        
+        this.nHeadPanelWidth = nStageWidth - 20;
+        this.nHeadPanelHeight = 10 + 70;
+        
+        context.strokeStyle = 'rgb(0, 0, 0)';
+        context.lineWidth = 5;
+        context.strokeRect(this.pos.x, this.pos.y, this.nHeadPanelWidth, this.nHeadPanelHeight);
+        
+        ////////////////////////////////
 
-        context.strokeRect(this.pos.x, this.pos.y, nFrameWidth, nFrameHeight);
+        this.nRightPanelWidth = 10 + 250;
+        this.nRightPanelHeight = this.nFrameHeight;
+        this.nRightPanelStartXPos = this.nFrameWidth - 250;
+        this.nRightPanelStartYPos = this.pos.y;
+        context.strokeStyle = 'rgb(0, 0, 0)';
+        context.lineWidth = 5;
+        context.strokeRect(this.nRightPanelStartXPos, this.nRightPanelStartYPos, this.nRightPanelWidth, this.nRightPanelHeight);
 
-        this.headPanel.onDraw(context, nFrameWidth, nFrameHeight);
+        ////////////////////////////////
+
+        this.importItem.onDraw(context, this);
+        this.showItem.onDraw(context, this);
     }
 }
