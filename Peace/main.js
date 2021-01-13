@@ -1,23 +1,29 @@
 import { Frame } from './frame.js';
-import { Point } from './point.js';
+import { Point } from './Base/point.js';
 
 class App {
 
     constructor() {
 
+        // Pixel Setting
+        this.pixelRatio = window.devicePixelRatio > 1 ? 2 : 1;
+
+        // Canvas For Painting
         this.canvas = document.createElement('canvas');        
         document.body.appendChild(this.canvas);
         this.context = this.canvas.getContext('2d');
-        
-        this.frame = new Frame();
-
-        this.mousePos = new Point();
-        
-        this.pixelRatio = window.devicePixelRatio > 1 ? 2 : 1;
-        
+      
+        // Canvas Width Height
         this.nStageWidth = 0;
         this.nStageHeight = 0;
+                
+        // Controller
+        this.frame = new Frame();
 
+        // For Mouse Event
+        this.mousePos = new Point();
+        
+        // Event Listener
         window.addEventListener('resize', this.resize.bind(this), false);
         this.resize();
 
@@ -43,20 +49,15 @@ class App {
 
         window.requestAnimationFrame(this.animate.bind(this));
 
-        this.context.clearRect(0, 0, this.stageWidth, this.stageHeight);
-        this.frame.onDraw(this.context, this.nStageWidth, this.nStageHeight);
+        this.context.clearRect(0, 0, this.nStageWidth, this.nStageHeight);
+        this.frame.onDraw(this.context,  this.nStageWidth, this.nStageHeight);
         
     }
 
     onClick(e) {
         this.mousePos.x = e.clientX;
         this.mousePos.y = e.clientY;
-        
-        let nMainItemsLength = this.frame.aMainItems.length;
-
-        for ( let i = nMainItemsLength - 1; i >= 0 ; i--) {
-            this.frame.aMainItems[i].onClick(this.mousePos.clone());
-        }
+        this.frame.onClick(this.mousePos.clone());
     }
 }
 

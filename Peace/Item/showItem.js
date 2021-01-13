@@ -1,4 +1,4 @@
-import { Point } from "./point.js";
+import { Point } from "../Base/point.js";
 
 export class ShowItem {
     constructor() {
