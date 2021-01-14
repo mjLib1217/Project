@@ -1,10 +1,9 @@
-import { Panel } from "../Base/panel.js";
 import { PanelItem } from "../Base/panelItem.js";
+import { SheetGrid } from "../sheet.js";
 
 export class ShGridItem extends PanelItem{
     constructor(headPanel) {
         super(headPanel.pos.x, headPanel.pos.y);  
-        this.curEvent = null;
     }
 
     onDraw(context, headPanel) {
@@ -19,10 +18,10 @@ export class ShGridItem extends PanelItem{
     }
 
     onClick(mousePoint) {
-        if(!mousePoint.collide(this.pos, this.nItemWidth, this.nItemHeight)) {
+        if(!mousePoint.collide(mousePoint, super.getPanelItemWidth(), super.getPanelItemHeight())) {
             return null;
         } else {
-            return this;
+            return new SheetGrid(mousePoint);
         }        
     }
 

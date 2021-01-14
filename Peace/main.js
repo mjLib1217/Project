@@ -30,7 +30,10 @@ class App {
         window.requestAnimationFrame(this.animate.bind(this));
 
         document.addEventListener('click', this.onClick.bind(this), false);
-
+        document.addEventListener('pointerdown', this.onDown.bind(this), false);
+        document.addEventListener('pointermove', this.onMove.bind(this), false);
+        document.addEventListener('pointerup', this.onUp.bind(this), false);
+        this.focus = null;
     }
 
     resize() {
@@ -52,12 +55,52 @@ class App {
         this.context.clearRect(0, 0, this.nStageWidth, this.nStageHeight);
         this.frame.onDraw(this.context,  this.nStageWidth, this.nStageHeight);
         
+
     }
 
     onClick(e) {
         this.mousePos.x = e.clientX;
         this.mousePos.y = e.clientY;
-        this.frame.onClick(this.mousePos.clone());
+        this.focus = this.frame.onClick(this.mousePos.clone());
+    }
+
+    onDown(e) {
+        if(this.focus !== null) {
+
+            console.log('Down');
+
+            this.mousePos.x = e.clientX;
+            this.mousePos.y = e.clientY;
+
+        }
+    }
+
+    onMove(e) {
+        if(this.focus !== null) {
+            console.log('Move');
+            console.log(this.focus);
+            if (this.focus.type == 'sheet') {
+                if(this.focus.bActive == false) {
+                    this.mousePos.x = e.clientX;
+                    this.mousePos.y = e.clientY;
+                    this.focus.onMove(this.mousePos);
+                }
+            }
+        }
+    }
+
+    onUp(e) {
+        if(this.focus !== null) {
+            console.log('Up');
+            if (this.focus.type == 'sheet') {
+                if(this.focus.bActive == false) {
+                    this.mousePos.x = e.clientX;
+                    this.mousePos.y = e.clientY;
+                    this.focus.onUp(this.mousePos);
+                    this.focus = null;
+                }
+            }
+        }
     }
 }
 

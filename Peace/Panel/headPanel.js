@@ -20,14 +20,14 @@ export class HeadPanel extends Panel {
         for(let i = 0; i < nGridItemsLenght; i++) {
             this.aGridItems[i].onDraw(context, this);
         }
-
-        // super.setPanelWidth(frame.nPanelWidth);
-        // super.setPanelHeight(frame.pos.y + 70);
-        // super.onDraw(context);
-
-        // let nMainItemsLenght = this.aMainItems.length;
-        // for(let i = 0; i < nMainItemsLenght; i++) {
-        //     this.aMainItems[i].onDraw(context, this);
-        // }
+    }
+    onClick(mousePos) {
+        let nGridItemsLength = this.aGridItems.length;
+        for ( let i = nGridItemsLength - 1; i >= 0 ; i--) {
+            const newItem = this.aGridItems[i].onClick(mousePos.clone());
+            if(newItem !== null) {
+                return newItem;
+            }
+        }
     }
 } 
