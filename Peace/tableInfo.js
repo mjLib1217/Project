@@ -1,4 +1,4 @@
-import { PanelItem } from "../Base/panelItem.js";
+import { PanelItem } from "./Base/panelItem.js";
 
 export class  TableInfo extends PanelItem {
     constructor(importItem) {
