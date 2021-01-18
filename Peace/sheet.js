@@ -4,16 +4,14 @@ export class SheetGrid extends Grid {
     constructor(mousePos) {
         super(mousePos.x, mousePos.y);
 
-        this.type = 'sheet';
         this.colNum = 0;
         this.rowNum = 0;
         this.bActive = false;
-        
         this.tmpKeyValues = [];
 
     }
 
-    onDraw(context) {       
+    onDraw(context, centerPanel) {
         super.setGridPos(super.getPos().x, super.getPos().y);
 
         if(this.bActive == false) {

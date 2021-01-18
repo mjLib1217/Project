@@ -23,6 +23,9 @@ class App {
         // For Mouse Event
         this.mousePos = new Point();
         
+        // Current Focus
+        this.focus = null;
+
         // Event Listener
         window.addEventListener('resize', this.resize.bind(this), false);
         this.resize();
@@ -30,10 +33,10 @@ class App {
         window.requestAnimationFrame(this.animate.bind(this));
 
         document.addEventListener('click', this.onClick.bind(this), false);
-        document.addEventListener('pointerdown', this.onDown.bind(this), false);
+        // document.addEventListener('pointerdown', this.onDown.bind(this), false);
         document.addEventListener('pointermove', this.onMove.bind(this), false);
-        document.addEventListener('pointerup', this.onUp.bind(this), false);
-        this.focus = null;
+        // document.addEventListener('pointerup', this.onUp.bind(this), false);
+        
     }
 
     resize() {
@@ -55,51 +58,48 @@ class App {
         this.context.clearRect(0, 0, this.nStageWidth, this.nStageHeight);
         this.frame.onDraw(this.context,  this.nStageWidth, this.nStageHeight);
         
-
+        if(this.focus !== null) {
+            this.focus.onDraw(this.context, this.frame.centerPanel);
+        }
     }
 
     onClick(e) {
+        console.log('clic');
         this.mousePos.x = e.clientX;
         this.mousePos.y = e.clientY;
-        this.focus = this.frame.onClick(this.mousePos.clone());
-    }
-
-    onDown(e) {
-        if(this.focus !== null) {
-
-            console.log('Down');
-
-            this.mousePos.x = e.clientX;
-            this.mousePos.y = e.clientY;
-
+        if(this.focus === null) {
+            this.focus = this.frame.onClick(this.mousePos.clone());
+        } else {
+            this.focus = null;
         }
+        
+        console.log(this.focus);
     }
 
     onMove(e) {
         if(this.focus !== null) {
-            console.log('Move');
-            console.log(this.focus);
-            if (this.focus.type == 'sheet') {
-                if(this.focus.bActive == false) {
-                    this.mousePos.x = e.clientX;
-                    this.mousePos.y = e.clientY;
-                    this.focus.onMove(this.mousePos);
-                }
-            }
-        }
-    }
 
-    onUp(e) {
-        if(this.focus !== null) {
-            console.log('Up');
-            if (this.focus.type == 'sheet') {
-                if(this.focus.bActive == false) {
-                    this.mousePos.x = e.clientX;
-                    this.mousePos.y = e.clientY;
-                    this.focus.onUp(this.mousePos);
-                    this.focus = null;
-                }
+            // Inside CenterPanel
+            if(this.mousePos.collide(this.frame.centerPanel.getPos(), this.frame.centerPanel.getPanelWidth(), this.frame.centerPanel.getPanelHeight())) {
+                console.log('collide');
+                this.mousePos.x = e.clientX;
+                this.mousePos.y = e.clientY;                
             }
+
+            // Outside CenterPanel
+            if(this.mousePos.x < this.frame.centerPanel.getPos().x) {
+                this.mousePos.x = this.frame.centerPanel.getPos().x;
+            } else if (this.mousePos.x > this.frame.centerPanel.getPos().x + this.frame.centerPanel.getPanelWidth() - 200 /** TABLE WIDTH */) {
+                this.mousePos.x = this.frame.centerPanel.getPos().x + this.frame.centerPanel.getPanelWidth() - 200 ;
+            }
+
+            if(this.mousePos.y < this.frame.centerPanel.getPos().y) {
+                this.mousePos.y = this.frame.centerPanel.getPos().y;
+            } else if (this.mousePos.y > this.frame.centerPanel.getPos().y + this.frame.centerPanel.getPanelHeight() - 200 /** TABLE HEIGHT */) {
+                this.mousePos.y = this.frame.centerPanel.getPos().y + this.frame.centerPanel.getPanelHeight() - 200;
+            }
+
+            this.focus.onMove(this.mousePos);
         }
     }
 }

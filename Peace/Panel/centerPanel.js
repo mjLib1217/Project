@@ -9,10 +9,11 @@ export class CenterPanel extends Panel {
 
     onDraw(context, frame) {        
 
-        super.setPanelPos(frame.pos.x, frame.pos.y);
-        super.setPanelWidth(frame.getPanelWidth());
-        super.setPanelHeight(80);
+        super.setPanelPos(frame.pos.x, frame.pos.y + frame.headPanel.getPanelHeight());
+        super.setPanelWidth(frame.getPanelWidth() - frame.rightPanel.getPanelWidth());
+        super.setPanelHeight(frame.rightPanel.getPanelHeight() - frame.headPanel.getPanelHeight());
         super.onDraw(context);
+        
 
         let nSheetListLen = this.sheetList.length;
         for(let i = 0; i < nSheetListLen; i++) {

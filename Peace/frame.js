@@ -37,10 +37,6 @@ export class Frame extends Panel{
 
         const newGrid = this.headPanel.onClick(mousePos);
         if(newGrid !== null) {
-            console.log(newGrid);
-            if(newGrid.type == 'sheet') {
-                this.centerPanel.sheetList.push(newGrid);
-            }
             return newGrid;
         }
         
