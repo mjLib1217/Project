@@ -11,7 +11,7 @@ export class ShowItem {
         this.pos.x = frame.importItem.pos.x + frame.importItem.nItemWidth;
         this.pos.y = frame.importItem.pos.y
         this.nItemWidth = ( frame.nRightPanelWidth - 20 ) / 2;
-        this.nItemHeight = frame.nFrameHeight / 12;
+        this.nItemHeight = frame.nFrameHeight / 14;
         
         context.strokeStyle = 'rgb(0, 0, 0)';
         context.lineWidth = 5;

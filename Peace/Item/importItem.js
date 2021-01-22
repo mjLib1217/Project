@@ -11,7 +11,7 @@ export class ImportItem extends PanelItem{
     onDraw(context, rightPanel) {
         super.setPanelItemPos(rightPanel.getPos().x + 10, rightPanel.getPos().y + 10);
         super.setPanelItemWidth(( rightPanel.getPanelWidth() - 20 ) / 2);
-        super.setPanelItemHeight(rightPanel.getPanelHeight() / 12);
+        super.setPanelItemHeight(60);
         super.onDraw(context);
         
         context.font = '30px Cursive';
@@ -25,7 +25,7 @@ export class ImportItem extends PanelItem{
         }
     }
 
-    onClick(mousePoint) {
+    onDown(mousePoint) {
         if(!mousePoint.collide(super.getPos(), super.getPanelItemWidth(), super.getPanelItemHeight())) {
             return;
         }
@@ -105,5 +105,9 @@ export class ImportItem extends PanelItem{
 
         file.click();
         file.remove();
+    }
+
+    onMove(mousePos) {
+        return null;
     }
 } 

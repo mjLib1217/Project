@@ -3,10 +3,10 @@ import { Grid } from "./Base/grid.js";
 export class SheetGrid extends Grid {
     constructor(mousePos) {
         super(mousePos.x, mousePos.y);
-
+        this.type = 'sheet';
         this.colNum = 0;
         this.rowNum = 0;
-        this.bActive = false;
+        this.bActivate = false;
         this.tmpKeyValues = [];
 
     }
@@ -14,7 +14,7 @@ export class SheetGrid extends Grid {
     onDraw(context, centerPanel) {
         super.setGridPos(super.getPos().x, super.getPos().y);
 
-        if(this.bActive == false) {
+        if(this.bActivate == false) {
             context.strokeRect(super.getPos().x, super.getPos().y, 200, 200);
             context.strokeRect(super.getPos().x, super.getPos().y, 200, 100);
             context.strokeRect(super.getPos().x, super.getPos().y, 100, 200);
@@ -60,7 +60,6 @@ export class SheetGrid extends Grid {
 
     onUp(mousePos) {
         super.setGridPos(mousePos.x, mousePos.y);
-        this.bActive = true;
     }
 
     onKeyUp(key) {
@@ -69,5 +68,10 @@ export class SheetGrid extends Grid {
         } else if(this.colNum == 0) {
             this.colNum = key;
         }
+    }
+
+
+    getType() {
+        return this.type;
     }
 } 

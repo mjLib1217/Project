@@ -1,11 +1,19 @@
 import { Point } from "./point.js";
 
+/*
 
+*/
 export class Panel {
     constructor(xPos, yPos) {
         this.pos = new Point(xPos, yPos);
         this.nPanelWidth = 0;
         this.nPanelHeight = 0;
+
+        this.type = 'myObject'
+    }
+
+    getType() {
+        return this.type;
     }
 
     onDraw(context) {        

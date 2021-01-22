@@ -4,16 +4,14 @@ import { ShGridItem } from '../Item/shGridItem.js';
 export class HeadPanel extends Panel {
     constructor(frame) {
         super(frame.pos.x, frame.pos.y);
+        super.setPanelWidth(frame.getPanelWidth() - 300);
+        super.setPanelHeight(80);
 
         this.aGridItems = [];
         this.aGridItems.push(new ShGridItem(this));
     }
 
-    onDraw(context, frame) {        
-
-        super.setPanelPos(frame.pos.x, frame.pos.y);
-        super.setPanelWidth(frame.getPanelWidth());
-        super.setPanelHeight(80);
+    onDraw(context) {             
         super.onDraw(context);
 
         let nGridItemsLenght = this.aGridItems.length;
@@ -21,10 +19,11 @@ export class HeadPanel extends Panel {
             this.aGridItems[i].onDraw(context, this);
         }
     }
-    onClick(mousePos) {
+
+    onDown(mousePos) {
         let nGridItemsLength = this.aGridItems.length;
         for ( let i = nGridItemsLength - 1; i >= 0 ; i--) {
-            const newItem = this.aGridItems[i].onClick(mousePos.clone());
+            const newItem = this.aGridItems[i].onDown(mousePos.clone());
             if(newItem !== null) {
                 return newItem;
             }

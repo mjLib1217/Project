@@ -1,8 +1,9 @@
 import { Point } from "./point.js";
 
-
 export class Grid {
+
     constructor(xPos, yPos) {
+
         this.pos = new Point(xPos, yPos);
         this.nGridWidth = 0;
         this.nGridHeight = 0;

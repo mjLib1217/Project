@@ -6,17 +6,17 @@ const RIGHTPANEL_WIDTH = 300;
 
 export class RightPanel extends Panel {
     constructor(frame) {
-        super(frame.getPos().x, frame.getPos().y);
-
+        super(frame.getPos().x + frame.headPanel.getPanelWidth(), frame.getPos().y);
+        super.setPanelWidth(RIGHTPANEL_WIDTH);
+        super.setPanelHeight(frame.getPanelHeight());
+        
         this.aMainItems = [];
         this.aMainItems.push(new ImportItem(this));
         this.aMainItems.push(new DetailItem(this));
     }
 
-    onDraw(context, frame) {
-        super.setPanelPos(frame.nPanelWidth - RIGHTPANEL_WIDTH, frame.pos.y);
-        super.setPanelWidth(frame.pos.x + RIGHTPANEL_WIDTH);
-        super.setPanelHeight(frame.nPanelHeight);
+    onDraw(context) {
+        
         super.onDraw(context);
 
         let nMainItemsLenght = this.aMainItems.length;
@@ -25,10 +25,10 @@ export class RightPanel extends Panel {
         }
     }
 
-    onClick(mousePos) {
+    onDown(mousePos) {
         let nMainItemsLenght = this.aMainItems.length;
         for(let i = 0; i < nMainItemsLenght; i++) {
-            this.aMainItems[i].onClick(mousePos);
+            this.aMainItems[i].onDown(mousePos);
         }
     }
 }

@@ -1,4 +1,3 @@
-import { Point } from './Base/point.js';
 import { Panel } from './Base/panel.js';
 import { HeadPanel } from './Panel/headPanel.js';
 import { RightPanel } from './Panel/rightPanel.js';
@@ -9,8 +8,10 @@ const FRAME_START_Y = 10;
 
 export class Frame extends Panel{
 
-    constructor() {
+    constructor(main) {
         super(FRAME_START_X, FRAME_START_Y);
+        super.setPanelWidth(main.nStageWidth - 20);
+        super.setPanelHeight(main.nStageHeight - 20);
         
         this.headPanel = new HeadPanel(this);
         this.rightPanel = new RightPanel(this);
@@ -18,10 +19,9 @@ export class Frame extends Panel{
         
     }
 
-    onDraw(context, nMainWidth, nMainHeight) {
+    onDraw(context) {
 
-        super.setPanelWidth(nMainWidth - 20);
-        super.setPanelHeight(nMainHeight - 20);
+
         super.onDraw(context);
         
         ////////////////////////////////
@@ -32,14 +32,18 @@ export class Frame extends Panel{
         ////////////////////////////////
     }
 
-    onClick(mousePos) {
-        this.rightPanel.onClick(mousePos);
-
-        const newGrid = this.headPanel.onClick(mousePos);
-        if(newGrid !== null) {
-            return newGrid;
+    onDown(mousePos) {
+        if(mousePos.collide(this.headPanel.getPos(), this.headPanel.getPanelWidth(), this.headPanel.getPanelHeight())) {
+            const newItem = this.headPanel.onDown(mousePos);
+            if(newItem !== null) {
+                return newItem;
+            }
+        } else if(mousePos.collide(this.rightPanel.getPos(), this.rightPanel.getPanelWidth(), this.rightPanel.getPanelHeight())) {
+            return this.rightPanel.onDown(mousePos);
+        } else if(mousePos.collide(this.centerPanel.getPos(), this.centerPanel.getPanelWidth(), this.centerPanel.getPanelHeight())) {
+            return this.centerPanel;
+        } else {
+            return null;
         }
-        
-        this.centerPanel.onClick(mousePos);
-    }
+    }    
 }

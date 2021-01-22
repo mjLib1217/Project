@@ -14,11 +14,11 @@ class App {
         this.context = this.canvas.getContext('2d');
       
         // Canvas Width Height
-        this.nStageWidth = 0;
-        this.nStageHeight = 0;
+        this.nStageWidth = window.innerWidth;;
+        this.nStageHeight = window.innerHeight;
                 
         // Controller
-        this.frame = new Frame();
+        this.frame = new Frame(this);
 
         // For Mouse Event
         this.mousePos = new Point();
@@ -32,11 +32,15 @@ class App {
 
         window.requestAnimationFrame(this.animate.bind(this));
 
-        document.addEventListener('click', this.onClick.bind(this), false);
-        // document.addEventListener('pointerdown', this.onDown.bind(this), false);
+        //document.addEventListener('click', this.onClick.bind(this), false);
+        document.addEventListener('pointerdown', this.onDown.bind(this), false);
         document.addEventListener('pointermove', this.onMove.bind(this), false);
-        // document.addEventListener('pointerup', this.onUp.bind(this), false);
-        
+        document.addEventListener('pointerup', this.onUp.bind(this), false);
+        document.addEventListener('keyup', this.onKeyUp.bind(this), false);
+    }
+
+    setFocus(focus) {
+        this.focus = focus;
     }
 
     resize() {
@@ -58,49 +62,80 @@ class App {
         this.context.clearRect(0, 0, this.nStageWidth, this.nStageHeight);
         this.frame.onDraw(this.context,  this.nStageWidth, this.nStageHeight);
         
-        if(this.focus !== null) {
+        if(this.focus) {
             this.focus.onDraw(this.context, this.frame.centerPanel);
         }
     }
 
-    onClick(e) {
-        console.log('clic');
+    onDown(e) {
+
         this.mousePos.x = e.clientX;
         this.mousePos.y = e.clientY;
-        if(this.focus === null) {
-            this.focus = this.frame.onClick(this.mousePos.clone());
-        } else {
-            this.focus = null;
+        const focusItem = this.frame.onDown(this.mousePos.clone());
+        if(focusItem !== null) {
+            this.focus = focusItem;
+            if(focusItem.type) {
+                this.focus.type = focusItem.type;
+            }
         }
-        
-        console.log(this.focus);
     }
 
     onMove(e) {
         if(this.focus !== null) {
 
-            // Inside CenterPanel
-            if(this.mousePos.collide(this.frame.centerPanel.getPos(), this.frame.centerPanel.getPanelWidth(), this.frame.centerPanel.getPanelHeight())) {
-                console.log('collide');
-                this.mousePos.x = e.clientX;
-                this.mousePos.y = e.clientY;                
-            }
+            if(this.focus.bActivate == false) {
+                
+                // Inside CenterPanel
+                if(this.mousePos.collide(this.frame.centerPanel.getPos(), this.frame.centerPanel.getPanelWidth(), this.frame.centerPanel.getPanelHeight())) {
+                    this.mousePos.x = e.clientX;
+                    this.mousePos.y = e.clientY;                
+                }
 
-            // Outside CenterPanel
-            if(this.mousePos.x < this.frame.centerPanel.getPos().x) {
-                this.mousePos.x = this.frame.centerPanel.getPos().x;
-            } else if (this.mousePos.x > this.frame.centerPanel.getPos().x + this.frame.centerPanel.getPanelWidth() - 200 /** TABLE WIDTH */) {
-                this.mousePos.x = this.frame.centerPanel.getPos().x + this.frame.centerPanel.getPanelWidth() - 200 ;
-            }
+                // Outside CenterPanel
+                if(this.mousePos.x < this.frame.centerPanel.getPos().x) {
+                    this.mousePos.x = this.frame.centerPanel.getPos().x;
+                } else if (this.mousePos.x > this.frame.centerPanel.getPos().x + this.frame.centerPanel.getPanelWidth() - 200 /** TABLE WIDTH */) {
+                    this.mousePos.x = this.frame.centerPanel.getPos().x + this.frame.centerPanel.getPanelWidth() - 200 ;
+                }
 
-            if(this.mousePos.y < this.frame.centerPanel.getPos().y) {
-                this.mousePos.y = this.frame.centerPanel.getPos().y;
-            } else if (this.mousePos.y > this.frame.centerPanel.getPos().y + this.frame.centerPanel.getPanelHeight() - 200 /** TABLE HEIGHT */) {
-                this.mousePos.y = this.frame.centerPanel.getPos().y + this.frame.centerPanel.getPanelHeight() - 200;
+                if(this.mousePos.y < this.frame.centerPanel.getPos().y) {
+                    this.mousePos.y = this.frame.centerPanel.getPos().y;
+                } else if (this.mousePos.y > this.frame.centerPanel.getPos().y + this.frame.centerPanel.getPanelHeight() - 200 /** TABLE HEIGHT */) {
+                    this.mousePos.y = this.frame.centerPanel.getPos().y + this.frame.centerPanel.getPanelHeight() - 200;
+                }
+                
+
             }
 
             this.focus.onMove(this.mousePos);
         }
+    }
+
+    onUp(e) {
+
+        if(this.focus !== null) {
+            this.mousePos.x = e.clientX;
+            this.mousePos.y = e.clientY;
+                    
+            if(this.focus.type == 'sheet') {            
+                if(this.focus.bActivate == false) {
+                    this.focus.setGridPos(this.mousePos.x, this.mousePos.y);
+                    this.focus.bActivate = true;
+                    this.frame.centerPanel.sheetList.push(this.focus);
+                }
+            }
+
+        }
+    }
+
+    onKeyUp(e) {
+        if(this.focus !== null) {
+            if(this.focus.type && this.focus.type == 'sheet') {
+                let key = String.fromCharCode(e.keyCode);
+                console.log(this.focus);
+                this.focus.onKeyUp(key);
+            }
+        }   
     }
 }
 

@@ -17,17 +17,10 @@ export class ShGridItem extends PanelItem{
         context.fillText('ShGrid', super.getPos().x + 10, super.getPos().y + 40);
     }
 
-    onClick(mousePoint) {
-        if(!mousePoint.collide(mousePoint, super.getPanelItemWidth(), super.getPanelItemHeight())) {
-            return null;
-        } else {
+    onDown(mousePoint) {
+        if(mousePoint.collide(mousePoint, super.getPanelItemWidth(), super.getPanelItemHeight())) {
             return new SheetGrid(mousePoint);
         }        
-    }
-
-    onDown(context, mousePos) {
-        context.strokeStyle = 'rgba(0, 0, 0, 0.5)';
-        context.strokeRect(mousePos.x, mousePos.y, 400, 300);
     }
 
     onMove(context, mousePos) {
