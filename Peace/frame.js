@@ -39,7 +39,10 @@ export class Frame extends Panel{
                 return newItem;
             }
         } else if(mousePos.collide(this.rightPanel.getPos(), this.rightPanel.getPanelWidth(), this.rightPanel.getPanelHeight())) {
-            return this.rightPanel.onDown(mousePos);
+            const newItem = this.rightPanel.onDown(mousePos);
+            if(newItem !== null) {
+                return newItem;
+            }
         } else if(mousePos.collide(this.centerPanel.getPos(), this.centerPanel.getPanelWidth(), this.centerPanel.getPanelHeight())) {
             return this.centerPanel;
         } else {

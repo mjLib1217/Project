@@ -9,6 +9,7 @@ export class HeadPanel extends Panel {
 
         this.aGridItems = [];
         this.aGridItems.push(new ShGridItem(this));
+
     }
 
     onDraw(context) {             

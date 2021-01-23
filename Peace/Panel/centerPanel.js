@@ -7,6 +7,7 @@ export class CenterPanel extends Panel {
         super.setPanelHeight(frame.rightPanel.getPanelHeight() - frame.headPanel.getPanelHeight());
 
         this.sheetList = [];
+
     }
 
     onDraw(context, frame) {        

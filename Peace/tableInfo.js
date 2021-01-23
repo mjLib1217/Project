@@ -1,10 +1,18 @@
 import { PanelItem } from "./Base/panelItem.js";
 
+let curFocusItem = function() {
+    this.bIsFocus = false;
+
+}
+
 export class  TableInfo extends PanelItem {
     constructor(importItem) {
         super(importItem.getPos().x, importItem.getPos().y);    
         this.Id = '';
         this.cols = [];
+        
+        this.type = 'tableInfo';
+        this.focus = new curFocusItem();
     }
 
     onDraw(context, importItem, nCurTableHeight) { 
@@ -32,5 +40,39 @@ export class  TableInfo extends PanelItem {
         }
 
         super.setPanelItemHeight(( nTotalHeight ));
+
+        context.save();
+        context.fillStyle = 'rgba(200, 0, 0, 0.5)';
+        context.fillRect(super.getPos().x, super.getPos().y, super.getPanelItemWidth(), 30);
+        context.restore();
+
+        if(this.focus.bIsFocus) {
+            console.log('focus');
+            console.log(this.focus.pos);
+            context.save();
+            context.fillStyle = 'rgba(0, 200, 0, 0.5)';
+            context.fillRect(this.focus.pos.x, this.focus.pos.y, super.getPanelItemWidth(), 30);
+            context.restore();
+            //this.focus.bIsFocus = false;
+        }
+    }
+
+    onDown(mousePoint) {
+        if(mousePoint.collide(super.getPos(), super.getPanelItemWidth(), 30)) {
+            this.focus.bIsFocus = true;
+            curFocusItem.prototype.pos = mousePoint;
+            return this;
+        } else if (mousePoint.collide(mousePoint, super.getPanelItemWidth(), super.getPanelItemHeight() - 30)) {
+            let nColLen = this.cols.length;
+            for(let i = 0; i < nColLen; i++) {
+                const newItem = this.cols[i].onDown(mousePoint);              
+                if(newItem) {
+                    console.log(newItem);
+                    return newItem;
+                }
+            }
+        } else {
+            this.focus.bIsFocus = false;
+        }
     }
 } 

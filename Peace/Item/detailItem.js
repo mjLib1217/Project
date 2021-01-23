@@ -3,6 +3,7 @@ import { PanelItem } from "../Base/panelItem.js";
 export class DetailItem extends PanelItem{
     constructor(rightPanel) {
         super(rightPanel.pos.x, rightPanel.pos.y);     
+        
     }
 
     onDraw(context, rightPanel) {

@@ -4,6 +4,7 @@ import { SheetGrid } from "../sheet.js";
 export class ShGridItem extends PanelItem{
     constructor(headPanel) {
         super(headPanel.pos.x, headPanel.pos.y);  
+        
     }
 
     onDraw(context, headPanel) {

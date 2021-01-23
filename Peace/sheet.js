@@ -34,6 +34,16 @@ export class SheetGrid extends Grid {
                 let nTotalHeight = 0;
                 for(let i = 0; i < this.colNum; i++) {
                     for(let j = 0; j < this.rowNum; j++) {
+                        if(j == 0) {
+                            context.save();
+
+                            context.fillStyle = 'rgba(0, 255, 0, 0.5)';    
+                            context.fillRect(super.getPos().x + (i * nColWidth), super.getPos().y + (j * nRowHeight), nColWidth, nRowHeight);
+                            nTotalHeight += super.getPos().x + (i * nRowHeight);
+                            nTotlaWidth += super.getPos().y + (j * nColWidth);
+                            
+                            context.restore();
+                        }
                         context.strokeRect(super.getPos().x + (i * nColWidth), super.getPos().y + (j * nRowHeight), nColWidth, nRowHeight);
                         nTotalHeight += super.getPos().x + (i * nRowHeight);
                         nTotlaWidth += super.getPos().y + (j * nColWidth);

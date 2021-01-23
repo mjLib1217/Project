@@ -5,6 +5,7 @@ export class ShowItem {
         this.pos = new Point();
         this.nItemWidth = 0;
         this.nItemHeight = 0;
+        
     }
 
     onDraw(context, frame) {

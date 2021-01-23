@@ -5,7 +5,9 @@ import { TableInfoItem } from "../tableInfoItem.js";
 export class ImportItem extends PanelItem{
     constructor(rightPanel) {
         super(rightPanel.getPos().x, rightPanel.getPos().y);     
-        this.tables = [];
+        
+        
+        this.type = 'panel_item';
     }
 
     onDraw(context, rightPanel) {
@@ -16,27 +18,21 @@ export class ImportItem extends PanelItem{
         
         context.font = '30px Cursive';
         context.fillText('Import', super.getPos().x + 20, super.getPos().y + 40);
-
-        let nTableSize = this.tables.length;
-        let nCurTableHeight = super.getPos().y + super.getPanelItemHeight();
-        for(let i = 0; i < nTableSize; i++) {
-            this.tables[i].onDraw(context, this, nCurTableHeight);
-            nCurTableHeight += this.tables[i].getPanelItemHeight() + 10;
-        }
     }
 
-    onDown(mousePoint) {
+    onDown(mousePoint, rightPanel) {
         if(!mousePoint.collide(super.getPos(), super.getPanelItemWidth(), super.getPanelItemHeight())) {
             return;
         }
 
         const file = document.createElement('input');
         file.type = 'file';
-
+        
         file.onchange = evt => {
 
             const uploadFile = evt.target.files[0];
             const reader = new FileReader();
+            
 
             reader.readAsText(uploadFile, 'UTF-8');
             reader.onload = readerEvt => {
@@ -97,14 +93,15 @@ export class ImportItem extends PanelItem{
                     curTable.cols.push(colItem);
                 } // for END
 
-                this.tables.push(curTable);
-                console.log(this.tables);            
+                rightPanel.tables.push(curTable);
             } // reader.onload = readerEvt => END
 
         } // file.onchange = evt => END
 
         file.click();
         file.remove();
+        
+        return this;
     }
 
     onMove(mousePos) {

@@ -4,8 +4,9 @@ export class TableInfoItem extends PanelItem  {
     constructor(tableInfo) {
         super(tableInfo.getPos().x, tableInfo.getPos().y);  
         this.name = '';
-        this.type = '';
         this.condition = [];
+
+        this.type = 'tableInfo_Item';
     }
 
     onDraw(context, tableInfo, nListIndex) {
@@ -27,5 +28,12 @@ export class TableInfoItem extends PanelItem  {
         }
 
         console.log('Click Show Item');
+    }
+
+    onDown(mousePoint) {
+        console.log(super.getPos());
+        if(mousePoint.collide(super.getPos(), super.getPanelItemWidth(), super.getPanelItemHeight())) {
+            return this;
+        }
     }
 } 
