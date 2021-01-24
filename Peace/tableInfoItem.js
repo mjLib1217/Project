@@ -10,7 +10,7 @@ export class TableInfoItem extends PanelItem  {
     }
 
     onDraw(context, tableInfo, nListIndex) {
-        super.setPanelItemPos(tableInfo.getPos().x, tableInfo.getPos().y + ( nListIndex + 1 ) * 30);
+        super.setPanelItemPos(tableInfo.getPos().x, tableInfo.getPos().y + ( nListIndex ) * 30);
         super.setPanelItemWidth(tableInfo.getPanelItemWidth());
         super.setPanelItemHeight(30);
         super.onDraw(context);
@@ -22,17 +22,11 @@ export class TableInfoItem extends PanelItem  {
         context.restore();
     }
 
-    onClick(mousePoint) {
-        if(!mousePoint.collide(this.pos, this.nItemWidth, this.nItemHeight)) {
-            return;
-        }
-
-        console.log('Click Show Item');
-    }
-
     onDown(mousePoint) {
-        console.log(super.getPos());
         if(mousePoint.collide(super.getPos(), super.getPanelItemWidth(), super.getPanelItemHeight())) {
+            console.log(mousePoint);
+            console.log(super.getPos());
+            console.log(this);
             return this;
         }
     }

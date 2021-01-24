@@ -65,8 +65,12 @@ export class ImportItem extends PanelItem{
                         }
                         console.log(tmpConstraintMap);
                     }
-                }
 
+                    let colItem = new TableInfoItem(this);
+                    colItem.name = curTable.Id;
+                    curTable.itemList.push(colItem);
+                }
+                
                 const sColRegex = /((?:\w+)(?=(?:TEXT\(\d+\)|INTEGER|REAL)))((?:TEXT\(\d+\)|INTEGER|REAL))((?:NOTNULL|PRIMARYKEY|DEFAULT\d+)?)/;
 
                 for(let i = 0; i < tmpColInfoArr.length; i++ ) {
@@ -90,9 +94,10 @@ export class ImportItem extends PanelItem{
                             colItem.condition.push(tmpConstraintMap.get(colItem.name));
                         }
                     }
-                    curTable.cols.push(colItem);
+                    curTable.itemList.push(colItem);
                 } // for END
 
+                console.log(curTable);
                 rightPanel.tables.push(curTable);
             } // reader.onload = readerEvt => END
 

@@ -8,6 +8,7 @@ export class SheetGrid extends Grid {
         this.rowNum = 0;
         this.bActivate = false;
         this.tmpKeyValues = [];
+        this.mColInfo = new Map();
 
     }
 
