@@ -86,7 +86,7 @@ export class ImportItem extends PanelItem{
                     
                     let colItem = new TableInfoItem(this);
                     colItem.name = matchedKeywords[1];
-                    colItem.type = matchedKeywords[2];
+                    colItem.dataType = matchedKeywords[2];
 
                     if(matchedKeywords.length == 4) {
                         colItem.condition.push(matchedKeywords[3]);

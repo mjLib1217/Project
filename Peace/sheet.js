@@ -8,7 +8,7 @@ export class SheetGrid extends Grid {
         this.rowNum = 0;
         this.bActivate = false;
         this.tmpKeyValues = [];
-        this.mColInfo = new Map();
+        this.colInfo = [];
 
     }
 
@@ -16,10 +16,7 @@ export class SheetGrid extends Grid {
         super.setGridPos(super.getPos().x, super.getPos().y);
 
         if(this.bActivate == false) {
-            context.strokeRect(super.getPos().x, super.getPos().y, 200, 200);
-            context.strokeRect(super.getPos().x, super.getPos().y, 200, 100);
-            context.strokeRect(super.getPos().x, super.getPos().y, 100, 200);
-            context.strokeRect(super.getPos().x, super.getPos().y, 100, 100);
+
         } else {
             if(this.colNum == 0 || this.rowNum == 0) {
                 super.setGridWidth(340);
@@ -44,6 +41,10 @@ export class SheetGrid extends Grid {
                             nTotlaWidth += super.getPos().y + (j * nColWidth);
                             
                             context.restore();
+
+                            if(this.colInfo.length > 0) {
+                                
+                            }
                         }
                         context.strokeRect(super.getPos().x + (i * nColWidth), super.getPos().y + (j * nRowHeight), nColWidth, nRowHeight);
                         nTotalHeight += super.getPos().x + (i * nRowHeight);
@@ -69,8 +70,11 @@ export class SheetGrid extends Grid {
         super.setGridPos(mousePos.x, mousePos.y);
     }
 
-    onUp(mousePos) {
-        super.setGridPos(mousePos.x, mousePos.y);
+    onUp(curFocusedItem) {
+        console.log(this.colInfo);
+        console.log(curFocusedItem);
+        this.colInfo.push(curFocusedItem);
+        console.log(this.colInfo);
     }
 
     onKeyUp(key) {

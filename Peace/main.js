@@ -70,19 +70,32 @@ class App {
         }
 
         if(this.bIsDown) {
-            console.log(true);
             this.context.save();
-            this.context.fillStyle = 'rgba(100, 100, 100, 0.5)';
-            this.context.beginPath();
-            this.context.arc(this.mousePos.x, this.mousePos.y, 35, 0, Math.PI * 2, false);
-            this.context.fill();
+            if(this.focus.type == 'tableInfo_Item') {
+                this.context.fillStyle = 'rgba(100, 100, 100, 0.5)';
+                this.context.beginPath();
+                this.context.fillText(this.focus.name, this.mousePos.x, this.mousePos.y);
+                this.context.fill();
+            } else if(this.focus.type == 'sheet') {
+                if(this.focus.bActivate == false) {
+                    this.context.strokeRect(this.mousePos.x, this.mousePos.y, 200, 200);
+                    this.context.strokeRect(this.mousePos.x, this.mousePos.y, 200, 100);
+                    this.context.strokeRect(this.mousePos.x, this.mousePos.y, 100, 200);
+                    this.context.strokeRect(this.mousePos.x, this.mousePos.y, 100, 100);
+                }
+            } else {
+                this.context.fillStyle = 'rgba(100, 100, 100, 0.5)';
+                this.context.beginPath();
+                this.context.arc(this.mousePos.x, this.mousePos.y, 10, 0, Math.PI * 2, false);
+                this.context.fill();
+            }
             this.context.restore();
         }
 
     }
 
     onDown(e) {
-
+        console.log('Down');
         this.bIsDown = true;
 
         this.mousePos.x = e.clientX;
@@ -90,6 +103,7 @@ class App {
         const focusItem = this.frame.onDown(this.mousePos.clone());
 
         this.focus = focusItem;
+        
         console.log(focusItem);
         if(focusItem.type) {
             this.focus.type = focusItem.type;
@@ -97,46 +111,42 @@ class App {
     }
 
     onMove(e) {
-        
         this.mousePos.x = e.clientX;
         this.mousePos.y = e.clientY;  
 
         if(this.focus !== null) {
 
-            if(this.focus.type == 'sheet') {
-                if(this.focus.bActivate == false) {
-                
-                    // Inside CenterPanel
-                    if(this.mousePos.collide(this.frame.centerPanel.getPos(), this.frame.centerPanel.getPanelWidth(), this.frame.centerPanel.getPanelHeight())) {
-               
-                    }
-    
-                    // Outside CenterPanel
-                    if(this.mousePos.x < this.frame.centerPanel.getPos().x) {
-                        this.mousePos.x = this.frame.centerPanel.getPos().x;
-                    } else if (this.mousePos.x > this.frame.centerPanel.getPos().x + this.frame.centerPanel.getPanelWidth() - 200 /** TABLE WIDTH */) {
-                        this.mousePos.x = this.frame.centerPanel.getPos().x + this.frame.centerPanel.getPanelWidth() - 200 ;
-                    }
-    
-                    if(this.mousePos.y < this.frame.centerPanel.getPos().y) {
-                        this.mousePos.y = this.frame.centerPanel.getPos().y;
-                    } else if (this.mousePos.y > this.frame.centerPanel.getPos().y + this.frame.centerPanel.getPanelHeight() - 200 /** TABLE HEIGHT */) {
-                        this.mousePos.y = this.frame.centerPanel.getPos().y + this.frame.centerPanel.getPanelHeight() - 200;
-                    }
-                    
-                    this.focus.onMove(this.mousePos);
-                }
-            }
+            if(
+                (this.focus.type == 'sheet' && this.focus.bActivate == false)
+                || this.focus.type == 'tableInfo_Item'
+                ) {
+                // Inside CenterPanel
+                if(this.mousePos.collide(this.frame.centerPanel.getPos(), this.frame.centerPanel.getPanelWidth(), this.frame.centerPanel.getPanelHeight())) {
 
-            
+                }
+
+                // Outside CenterPanel
+                if(this.mousePos.x < this.frame.centerPanel.getPos().x) {
+                    this.mousePos.x = this.frame.centerPanel.getPos().x;
+                } else if (this.mousePos.x > this.frame.centerPanel.getPos().x + this.frame.centerPanel.getPanelWidth() - 200 /** TABLE WIDTH */) {
+                    this.mousePos.x = this.frame.centerPanel.getPos().x + this.frame.centerPanel.getPanelWidth() - 200 ;
+                }
+
+                if(this.mousePos.y < this.frame.centerPanel.getPos().y) {
+                    this.mousePos.y = this.frame.centerPanel.getPos().y;
+                } else if (this.mousePos.y > this.frame.centerPanel.getPos().y + this.frame.centerPanel.getPanelHeight() - 200 /** TABLE HEIGHT */) {
+                    this.mousePos.y = this.frame.centerPanel.getPos().y + this.frame.centerPanel.getPanelHeight() - 200;
+                }
+                
+            }            
         }
     }
 
     onUp(e) {
-
+        console.log('Up');
         this.bIsDown = false;
 
-        if(this.focus !== null) {
+        if(this.focus) {
             this.mousePos.x = e.clientX;
             this.mousePos.y = e.clientY;
                     
@@ -146,8 +156,15 @@ class App {
                     this.focus.bActivate = true;
                     this.frame.centerPanel.sheetList.push(this.focus);
                 }
+            } else if(this.focus.type == 'tableInfo_Item') {
+                
+                if(this.mousePos.collide(this.frame.centerPanel.getPos(), this.frame.centerPanel.getPanelWidth(), this.frame.centerPanel.getPanelHeight())) {
+                    let nSheetLen = this.frame.centerPanel.sheetList.length;
+                    for(let i = 0; i < nSheetLen; i++) {
+                        this.frame.centerPanel.sheetList[i].onUp(this.focus);              
+                    }
+                }
             }
-
         }
     }
 

@@ -45,8 +45,6 @@ export class  TableInfo extends PanelItem {
                 }
             }
 
-        } else {
-            this.focus.bIsFocus = false;
         }
     }
 } 
